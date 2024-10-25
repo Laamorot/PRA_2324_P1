@@ -21,14 +21,13 @@ class ListArray : public List<T> {
             max = new_size;
         };
 
-
     public:
         // miembros públicos, incluidos los heredados de List<T>
         void insert(int pos, T e) override{
             try {
                 if (pos > 0 && pos <= n){
                     if (n == max) {
-                        resize (max + 15);
+                        resize (max + 20);
                     }
                     for (int i = n; i > pos; --i) { // All elements after pos are right shifted to avoid overwriting.
                         arr[i] = arr[i - 1];
@@ -52,18 +51,61 @@ class ListArray : public List<T> {
             insert(0, e);
         };
 
-
         T remove(int pos) override {
-            int aux = arr[pos];
-            for (int i = n; i > pos; i --){
-                arr[i]
+            T value;
+            try{
+                if (pos >= 0 && pos < n){
+                    value = arr[pos];
+                    for (int i = pos; i < n - 1; i++) { // All elements after pos are left shifted to avoid gaps.
+                        arr[i] = arr[i + 1];
+                    }
+                    n--;
+                    if (n < max - 15) {
+                        resize(max - 15);
+                    }
+                } else {
+                    throw std::out_of_range("Position out of range");
+                }
+            }   
+            catch (const std::out_of_range& e) {
+                std::cout << e.what() << std::endl;
+            }
+            return value;
+        };
+
+        T get(int pos) override {
+            try {
+                if (pos >= 0 && pos < n) {
+                    return arr[pos];
+                } else {
+                    throw std::out_of_range("Out of range");
+                }
+            }
+            catch (const std::out_of_range& e) {
+                std::cout << e.what() << std::endl;
             }
         };
-        T get(int pos);
-        int search(T e);
-        bool empty();
-        int size();
 
+        int search(T e) override {
+            for (int i = 0; i < n; i++) {
+                if (arr[i] == e) {
+                    return i;
+                }
+            }
+            return -1;
+        };
+
+        bool empty() override {
+            if (n == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        int size() override {
+            return n;
+        };
 
         ListArray(){
             arr = new T[MINSIZE];
@@ -91,6 +133,4 @@ class ListArray : public List<T> {
             out << "]";
             return out;
         };
-
-    
 };
