@@ -73,19 +73,20 @@ class ListArray : public List<T> {
             }
             return value;
         };
-
-        T get(int pos) override {
-            try {
-                if (pos >= 0 && pos < n) {
-                    return arr[pos];
-                } else {
-                    throw std::out_of_range("Out of range");
+        T get(int pos) override{
+                try {
+                if (pos < n && pos >= 0) {
+                return arr[pos];
+                } 
+                else {
+                throw std::out_of_range("");
                 }
-            }
-            catch (const std::out_of_range& e) {
-                std::cout << e.what() << std::endl;
-            }
-        };
+                }
+                catch (std::out_of_range()) {
+                std::cout << "out_of_range";
+                }
+
+            };
 
         int search(T e) override {
             for (int i = 0; i < n; i++) {
